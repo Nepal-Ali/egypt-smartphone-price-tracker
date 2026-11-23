@@ -20,7 +20,7 @@ The same phone is sold on several websites at different prices, and each website
 | Extract | `01_extract_jumia.ipynb` | Scrape all smartphones from Jumia Egypt | Done |
 | Extract | `02_extract_noon.ipynb` | Scrape all smartphones from noon Egypt | In progress |
 | Extract | `03_extract_btech.ipynb` | Scrape all smartphones from B.TECH | Planned |
-| Transform | `04_transform.ipynb` | Clean prices, extract brand / storage / RAM, remove duplicates | Planned |
+| Transform | `04_transform.ipynb` | Clean prices, extract brand / storage / RAM, remove duplicates | Done (Jumia) |
 | Load | `05_load_sql.ipynb` | Load clean data into a SQLite database | Planned |
 | Report | `06_report.ipynb` | SQL analysis and final Excel report | Planned |
 
@@ -38,6 +38,25 @@ I followed the rules in Jumia's `robots.txt`:
 - A delay between requests keeps the rate far below the allowed 200 requests per minute.
 - Only public category pages are used. Disallowed paths such as `/mobapi/` are not accessed.
 - No personal data is collected, only public product information.
+
+## Data Cleaning
+
+The raw Jumia data had several real problems. `04_transform.ipynb` fixes them and saves the result to `data/clean/`.
+
+| Problem in the raw data | Fix |
+|---|---|
+| Prices stored as text (`EGP 8,599.00`) | Converted price, old price and discount to numbers |
+| 19 non-phone products in the category (air conditioners, kettles, microwaves, phone cases) | Removed using a keyword list, after reviewing them |
+| Same brand written in different ways (`XIAOMI`, `Mi`, `Redmi`, `Infinx`) | Unified with a fix list (`Xiaomi`, `Infinix`) |
+| Refurbished phones listed under the brand `Renewed` | Real brand taken from the name, plus a new `is_renewed` column |
+| Rating `0` for products with no reviews | Set to empty, so it does not pull brand averages down |
+| Storage and RAM only inside the product name, in many formats (`128GB/4GB`, `4GB - 64GB`, `(RAM:4,ROM:64)`, `8/256`) | Extracted into `storage_gb` and `ram_gb` using known valid sizes |
+| Phones sold with a free gift (earbuds, watch) | Flagged in `has_gift`, so price comparisons stay fair |
+| Extra spaces in product names | Removed |
+
+Values that cannot be read reliably (for example a typo like `2568GB`) are left empty instead of guessed.
+
+**Result:** 1,829 phones with 22 columns, including the new `storage_gb`, `ram_gb`, `network`, `is_renewed` and `has_gift`.
 
 ## Extracted Columns
 
@@ -67,6 +86,7 @@ I followed the rules in Jumia's `robots.txt`:
 ```
 egypt-smartphone-price-tracker/
 ├── 01_extract_jumia.ipynb
+├── 04_transform.ipynb
 ├── data/
 │   ├── raw/          # Raw data as scraped, one file per day
 │   └── clean/        # Cleaned data
@@ -94,6 +114,8 @@ jupyter notebook
 ```
 
 Then open `01_extract_jumia.ipynb` and run all cells. A full run takes about 15 to 20 minutes, and the output is saved in `data/raw/` with today's date in the file name.
+
+After that, run `04_transform.ipynb`. It reads the latest raw file and saves the cleaned data in `data/clean/`.
 
 ## Author
 
