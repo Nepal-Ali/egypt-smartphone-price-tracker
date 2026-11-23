@@ -107,7 +107,7 @@ egypt-smartphone-price-tracker/
 ## How to Run
 
 ```bash
-git clone https://github.com/Nepal-Ali/egypt-smartphone-price-tracker.git
+git clone https://github.com/nepal-aly/egypt-smartphone-price-tracker.git
 cd egypt-smartphone-price-tracker
 pip install -r requirements.txt
 jupyter notebook
@@ -121,5 +121,5 @@ After that, run `04_transform.ipynb`. It reads the latest raw file and saves the
 
 **Nepal Adel Ali**
 
-- GitHub: [Nepal-Ali](https://github.com/Nepal-Ali)
+- GitHub: [nepal-aly](https://github.com/nepal-aly)
 - LinkedIn: [nepal-aly-data](https://www.linkedin.com/in/nepal-aly-data)
