@@ -2,6 +2,8 @@
 
 An end-to-end ETL pipeline that collects smartphone prices from Egyptian e-commerce websites, cleans and standardizes the data, and loads it into a SQL database for price comparison and tracking over time.
 
+![Top 10 smartphone brands on Jumia Egypt](images/jumia-top-brands.png)
+
 ## Project Goal
 
 The same phone is sold on several websites at different prices, and each website writes the product name differently. I built this pipeline to:
